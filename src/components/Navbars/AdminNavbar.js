@@ -19,6 +19,7 @@ import React from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 import codewars_logo from "../../assets/img/codewars_logo.png"
+import logo_15 from "../../assets/logo_15.png"
 // reactstrap components
 import {
   Button,
@@ -78,6 +79,7 @@ function AdminNavbar(props) {
             <img src = {codewars_logo} height="40px"></img>
           </div>
             </Nav>
+            <img src = {logo_15} height = "90px"></img>
           </Collapse>
         </Container>
       </Navbar>
