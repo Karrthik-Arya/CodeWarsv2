@@ -52,7 +52,6 @@
     "gulp-append-prepend": "1.0.8"
   },
   "engines" : { 
-    "npm" : ">=7.0.0",
-    "node" : ">=14.0.0"
+    "node" : "14.19.0"
   }
 }
