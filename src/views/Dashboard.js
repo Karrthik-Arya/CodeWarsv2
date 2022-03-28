@@ -55,6 +55,10 @@ function Dashboard(props) {
   const setBgChartData = (name) => {
     setbigChartData(name);
   };
+  fetch('https://codewars-server.herokuapp.com/results')
+  .then(response => response.json())
+  .then(data => this.setState({ results: data }));
+  console.log(this.state.results)
   return (
     <>
       <div className="content">
@@ -133,7 +137,7 @@ function Dashboard(props) {
                     <tr>
                       <th>Rank</th>
                       <th>Team Name</th>
-                      <th className="text-center">Profit</th>
+                      <th className="text-center">Score</th>
                     </tr>
                   </thead>
                   <tbody>
