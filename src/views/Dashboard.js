@@ -48,27 +48,77 @@ import {
   chartExample2,
   chartExample3,
   chartExample4,
+  chart1_2_options
 } from "variables/charts.js";
+import react from "react";
+import { func } from "prop-types";
 
+
+var init = true;
 function Dashboard(props) {
   const [bigChartData, setbigChartData] = React.useState("data1");
+  const [activeTeam, setActiveTeam] = React.useState('001');
   const setBgChartData = (name) => {
     setbigChartData(name);
   };
-  fetch('https://codewars-server.herokuapp.com/results')
-  .then(response => response.json())
-  .then(data => this.setState({ results: data }));
-  console.log(this.state.results)
+
+ const [results,setResults] = react.useState(null);
+
+  react.useEffect(()=>{
+    fetch('https://codewars-server.herokuapp.com/results')
+  .then(response => response.json().then(data=> setResults(data)))
+    if(results && init){
+    setActiveTeam(results[0].team_id)
+    init = false
+    }
+  },[results])
+
   return (
     <>
       <div className="content">
         <Row>
+
+          <Col lg="6">
+            <Card>
+              <CardHeader>
+                <CardTitle tag="h4">Leaderboard</CardTitle>
+              </CardHeader>
+              <CardBody>
+                <Table className="tablesorter">
+                  <thead className="text-primary">
+                    <tr>
+                      <th>Rank</th>
+                      <th>Team Name</th>
+                      <th className="text-center">Rounds</th>
+                      <th className="text-center">Score</th>
+                      
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {results && results.map(function(result,i){
+
+                      return (
+                        <tr style = {{cursor:'pointer'}}onClick={()=>setActiveTeam(result.team_id)}>
+                      <td>{i+1}</td>
+                      <td>{result.name}</td>
+                      <td className="text-center">{result.round}</td>
+                      <td className="text-center">{result.profit}</td>
+                    </tr>
+                      )
+                    })}
+                    
+                  </tbody>
+                </Table>
+              </CardBody>
+            </Card>
+          </Col>
+
           <Col lg = "6">
             <Card className="card-chart">
               <CardHeader>
                 <Row>
                   <Col className="text-left" sm="6">
-                    <h5 className="card-category">The Market</h5>
+                    <h5 className="card-category">{results&&results.find(({team_id})=> team_id == activeTeam).name}</h5>
                     <CardTitle tag="h2">Performance</CardTitle>
                   </Col>
                   <Col sm="6">
@@ -93,24 +143,6 @@ function Dashboard(props) {
                           <i className="tim-icons icon-single-02" />
                         </span>
                       </Button>
-                      <Button
-                        color="info"
-                        id="1"
-                        size="sm"
-                        tag="label"
-                        className={classNames("btn-simple", {
-                          active: bigChartData === "data2",
-                        })}
-                        onClick={() => setBgChartData("data2")}
-                      >
-                        <span className="d-none d-sm-block d-md-block d-lg-block d-xl-block">
-                          Purchases
-                        </span>
-                        
-                        <span className="d-block d-sm-none">
-                          <i className="tim-icons icon-tap-02" />
-                        </span>
-                      </Button>
                     </ButtonGroup>
                   </Col>
                 </Row>
@@ -118,128 +150,63 @@ function Dashboard(props) {
               <CardBody>
                 <div className="chart-area">
                   <Line
-                    data={chartExample1[bigChartData]}
-                    options={chartExample1.options}
-                  />
-                </div>
-              </CardBody>
-            </Card>
-          </Col>
-
-          <Col lg="6">
-            <Card>
-              <CardHeader>
-                <CardTitle tag="h4">Leaderboard</CardTitle>
-              </CardHeader>
-              <CardBody>
-                <Table className="tablesorter">
-                  <thead className="text-primary">
-                    <tr>
-                      <th>Rank</th>
-                      <th>Team Name</th>
-                      <th className="text-center">Score</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>Team-1</td>
-                      <td className="text-center">$36,738</td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>Team-2</td>
-                      <td className="text-center">$23,789</td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                      <td>Netherlands</td>
-                      <td className="text-center">$56,142</td>
-                    </tr>
-                    <tr>
-                      <td>4</td>
-                      <td>Korea, South</td>
-                      <td className="text-center">$38,735</td>
-                    </tr>
-                    <tr>
-                      <td>5</td>
-                      <td>Malawi</td>
-                      <td className="text-center">$63,542</td>
-                    </tr>
-                    <tr>
-                      <td>6</td>
-                      
-                      <td>Gloucester</td>
-                      <td className="text-center">$78,615</td>
-                    </tr>
-                    <tr>
-                      <td>7</td>
-                      <td>Portugal</td>
-                      <td className="text-center">$98,615</td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
-        <Row>
-          <Col lg="4">
-            <Card className="card-chart">
-              <CardHeader>
-                <h5 className="card-category">Total Shipments</h5>
-                <CardTitle tag="h3">
-                  <i className="tim-icons icon-bell-55 text-info" /> 763,215
-                </CardTitle>
-              </CardHeader>
-              <CardBody>
-                <div className="chart-area">
-                  <Line
-                    data={chartExample2.data}
-                    options={chartExample2.options}
-                  />
-                </div>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col lg="4">
-            <Card className="card-chart">
-              <CardHeader>
-                <h5 className="card-category">Daily Sales</h5>
-                <CardTitle tag="h3">
-                  <i className="tim-icons icon-delivery-fast text-primary" />{" "}
-                  3,500€
-                </CardTitle>
-              </CardHeader>
-              <CardBody>
-                <div className="chart-area">
-                  <Bar
-                    data={chartExample3.data}
-                    options={chartExample3.options}
-                  />
-                </div>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col lg="4">
-            <Card className="card-chart">
-              <CardHeader>
-                <h5 className="card-category">Completed Tasks</h5>
-                <CardTitle tag="h3">
-                  <i className="tim-icons icon-send text-success" /> 12,100K
-                </CardTitle>
-              </CardHeader>
-              <CardBody>
-                <div className="chart-area">
-                  <Line
-                    data={chartExample4.data}
-                    options={chartExample4.options}
+                    data={chartExample1(activeTeam, results)}
+                    options={{
+                      maintainAspectRatio: false,
+                      legend: {
+                        display: false,
+                      },
+                      tooltips: {
+                        backgroundColor: "#f5f5f5",
+                        titleFontColor: "#333",
+                        bodyFontColor: "#666",
+                        bodySpacing: 4,
+                        xPadding: 12,
+                        mode: "nearest",
+                        intersect: 0,
+                        position: "nearest",
+                      },
+                      responsive: true,
+                      scales: {
+                        yAxes: [
+                          {
+                            barPercentage: 1.6,
+                            gridLines: {
+                              drawBorder: false,
+                              color: "rgba(29,140,248,0.0)",
+                              zeroLineColor: "transparent",
+                            },
+                            ticks: {
+                              suggestedMin: 0,
+                              suggestedMax: 60,
+                              padding: 20,
+                              fontColor: "#9a9a9a",
+                            },
+                          },
+                        ],
+                        xAxes: [
+                          {
+                            barPercentage: 1.6,
+                            gridLines: {
+                              drawBorder: false,
+                              color: "rgba(29,140,248,0.1)",
+                              zeroLineColor: "transparent",
+                            },
+                            ticks: {
+                              padding: 20,
+                              fontColor: "#9a9a9a",
+                            },
+                          },
+                        ],
+                      },
+                    }}
                   />
                 </div>
               </CardBody>
             </Card>
           </Col>
         </Row>
+        
       
       </div>
     </>
