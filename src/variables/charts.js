@@ -75,7 +75,9 @@ let chart1_2_options = {
 // #########################################
 let chartExample1 = (team,results,)=>{
     if(results){
+      console.log(results)
     const team_result = results.find(({team_id})=> team_id == team)
+    console.log(team)
     const rounds = team_result.round
     const labels= [];
     for(let i=1;i<=rounds;i++){

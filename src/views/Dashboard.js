@@ -57,7 +57,7 @@ import { func } from "prop-types";
 var init = true;
 function Dashboard(props) {
   const [bigChartData, setbigChartData] = React.useState("data1");
-  const [activeTeam, setActiveTeam] = React.useState('001');
+  const [activeTeam, setActiveTeam] = React.useState('ra1');
   const setBgChartData = (name) => {
     setbigChartData(name);
   };
@@ -67,6 +67,7 @@ function Dashboard(props) {
   react.useEffect(()=>{
     fetch('https://codewars-server.herokuapp.com/results')
   .then(response => response.json().then(data=> setResults(data)))
+  console.log(results)
     if(results && init){
     setActiveTeam(results[0].team_id)
     init = false
@@ -79,7 +80,7 @@ function Dashboard(props) {
         <Row>
 
           <Col lg="6">
-            <Card>
+            <Card style = {{"overflow-y":'scroll',height:'500px'}}>
               <CardHeader>
                 <CardTitle tag="h4">Leaderboard</CardTitle>
               </CardHeader>
@@ -118,7 +119,7 @@ function Dashboard(props) {
               <CardHeader>
                 <Row>
                   <Col className="text-left" sm="6">
-                    <h5 className="card-category">{results&&results.find(({team_id})=> team_id == activeTeam).name}</h5>
+                    <h5 className="card-category">{results && results.find(({team_id})=> team_id == activeTeam).name}</h5>
                     <CardTitle tag="h2">Performance</CardTitle>
                   </Col>
                   <Col sm="6">
