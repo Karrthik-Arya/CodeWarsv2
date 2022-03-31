@@ -57,7 +57,7 @@ import { func } from "prop-types";
 var init = true;
 function Dashboard(props) {
   const [bigChartData, setbigChartData] = React.useState("data1");
-  const [activeTeam, setActiveTeam] = React.useState('ra1');
+  const [activeTeam, setActiveTeam] = React.useState('532');
   const setBgChartData = (name) => {
     setbigChartData(name);
   };
